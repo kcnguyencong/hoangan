@@ -1,44 +1,7 @@
 import React from 'react';
-import { Phone, Search, Menu, X, Facebook, Instagram, Youtube, MapPin, Mail, Clock, ChevronLeft, ChevronRight, LayoutDashboard, LogOut, Plus, Edit2, Trash2, Save, Settings, FileText, Package, Users, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Phone, Search, Menu, X, Facebook, Instagram, Youtube, MapPin, Mail, Clock, ChevronLeft, ChevronRight, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
-// --- Types ---
-type Page = 'home' | 'list' | 'detail' | 'projects' | 'search';
-
-interface Product {
-  id: string;
-  title: string;
-  cat: string;
-  price: number;
-  priceStr: string;
-  img: string;
-  tag?: string;
-  color?: string;
-  description?: string;
-}
-
-interface Project {
-  id: string;
-  title: string;
-  location: string;
-  category: string;
-  img: string;
-  desc: string;
-}
-
-interface SiteSettings {
-  hotline: string;
-  footerText: string;
-  address: string;
-  email: string;
-}
-
-interface Consultation {
-  id: string;
-  phone: string;
-  createdAt: any;
-  status: 'pending' | 'contacted' | 'closed';
-}
 
 // --- Constants ---
 
@@ -55,9 +18,107 @@ const PRODUCTS = [
   { id: '10', title: 'Thảm Cỏ Nhân Tạo 3cm', price: 95000, priceStr: '95.000₫', cat: 'Thảm Cỏ Nhân Tạo', color: '#5d4037', img: 'https://images.unsplash.com/photo-1558603668-6570496b66f8?auto=format&fit=crop&q=80' },
 ];
 
+// --- Types ---
+
+type Page = 'home' | 'list' | 'detail' | 'projects' | 'project-detail' | 'search';
+
+interface SiteSettings {
+  hotline: string;
+  email: string;
+  address: string;
+  footerText: string;
+}
+
+const PROJECTS_DATA = [
+  {
+    id: '1',
+    title: 'Biệt Thự Vinhomes Riverside',
+    location: 'Long Biên, Hà Nội',
+    category: 'Sàn Gỗ Tự Nhiên',
+    img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
+    desc: 'Thi công trọn gói sàn gỗ Gõ Đỏ Lào cho toàn bộ không gian 3 tầng biệt thự.',
+    fullDesc: 'Dự án biệt thự tại Vinhomes Riverside yêu cầu sự sang trọng và đẳng cấp tuyệt đối. Chúng tôi đã tư vấn và thi công trọn gói sàn gỗ Gõ Đỏ Lào - loại gỗ quý hiếm với vân gỗ đẹp và độ bền vĩnh cửu. Toàn bộ diện tích 450m2 sàn được xử lý tỉ mỉ, kết hợp với phào chỉ đồng bộ tạo nên không gian sống thượng lưu.',
+    gallery: [
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80'
+    ]
+  },
+  {
+    id: '2',
+    title: 'Penthouse Sunshine City',
+    location: 'Tây Hồ, Hà Nội',
+    category: 'Tấm Ốp Tường & Rèm',
+    img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80',
+    desc: 'Sử dụng tấm ốp Nano vân đá kết hợp rèm cửa voan cao cấp tạo không gian hiện đại.',
+    fullDesc: 'Với tầm nhìn panorama hướng ra cầu Nhật Tân, căn Penthouse tại Sunshine City được thiết kế theo phong cách hiện đại, tối giản. Điểm nhấn là hệ thống tấm ốp tường Nano vân đá cẩm thạch kết hợp với rèm cửa voan 2 lớp, vừa đảm bảo tính thẩm mỹ vừa tối ưu ánh sáng tự nhiên.',
+    gallery: [
+      'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80'
+    ]
+  },
+  {
+    id: '3',
+    title: 'Nhà Hàng Sen Tây Hồ',
+    location: 'Tây Hồ, Hà Nội',
+    category: 'Sàn Nhựa SPC',
+    img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80',
+    desc: 'Lắp đặt sàn nhựa SPC chịu lực cao cho khu vực sảnh chính và phòng VIP.',
+    fullDesc: 'Dự án cải tạo sàn nhà hàng Sen Tây Hồ đòi hỏi vật liệu có khả năng chịu nước 100% và chống trầy xước cực tốt do mật độ đi lại cao. Sàn nhựa SPC vân gỗ sồi đã được lựa chọn để mang lại vẻ ấm cúng nhưng vẫn đảm bảo độ bền công nghiệp.',
+    gallery: [
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1567653418876-5bb0e566e1c2?auto=format&fit=crop&q=80'
+    ]
+  },
+  {
+    id: '4',
+    title: 'Căn Hộ Goldmark City',
+    location: 'Bắc Từ Liêm, Hà Nội',
+    category: 'Giấy Dán Tường & Phào Chỉ',
+    img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80',
+    desc: 'Trang trí phòng ngủ với giấy dán tường Hàn Quốc và phào chỉ tân cổ điển.',
+    fullDesc: 'Căn hộ tại Goldmark City được trang trí theo phong cách Tân cổ điển nhẹ nhàng. Chúng tôi sử dụng giấy dán tường Hàn Quốc họa tiết chìm kết hợp với hệ thống phào chỉ PU trắng sứ, tạo nên không gian nghỉ ngơi thư giãn và sang trọng.',
+    gallery: [
+      'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80'
+    ]
+  },
+  {
+    id: '5',
+    title: 'Văn Phòng Techcombank',
+    location: 'Hoàn Kiếm, Hà Nội',
+    category: 'Thảm Cỏ & Sàn Gỗ',
+    img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80',
+    desc: 'Kiến tạo không gian xanh với thảm cỏ nhân tạo và sàn gỗ công nghiệp cao cấp.',
+    fullDesc: 'Thiết kế văn phòng mở hiện đại cho Techcombank, kết hợp giữa sàn gỗ công nghiệp màu xám trung tính và các mảng xanh từ thảm cỏ nhân tạo tại khu vực pantry và relax zone, giúp nhân viên có không gian làm việc sáng tạo.',
+    gallery: [
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1567653418876-5bb0e566e1c2?auto=format&fit=crop&q=80'
+    ]
+  },
+  {
+    id: '6',
+    title: 'Showroom Mercedes-Benz',
+    location: 'Hải Phòng',
+    category: 'Sàn Nhựa Vinyl',
+    img: 'https://images.unsplash.com/photo-1567653418876-5bb0e566e1c2?auto=format&fit=crop&q=80',
+    desc: 'Sàn nhựa Vinyl chống trượt, chịu tải trọng lớn cho khu vực trưng bày xe.',
+    fullDesc: 'Showroom ô tô yêu cầu sàn nhà có độ bóng cao nhưng phải chống trượt và chịu được tải trọng lớn của xe trưng bày. Sàn nhựa Vinyl cuộn cao cấp đã đáp ứng hoàn hảo các tiêu chuẩn kỹ thuật khắt khe này.',
+    gallery: [
+      'https://images.unsplash.com/photo-1567653418876-5bb0e566e1c2?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80',
+      'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80'
+    ]
+  }
+];
+
 // --- Components ---
 
-const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNavigate: (p: Page) => void, currentPage: Page, onSearchClick: () => void, settings: SiteSettings | null }) => {
+const Navbar = ({ onNavigate, currentPage, onSearchClick }: { onNavigate: (p: Page) => void, currentPage: Page, onSearchClick: () => void }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = React.useState(false);
 
@@ -167,7 +228,7 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNaviga
             </div>
             <div>
               <p className="text-[9px] uppercase tracking-widest text-luxe-gold font-bold leading-none mb-1">Hotline 24/7</p>
-              <p className="font-serif text-lg text-luxe-black tracking-wider leading-none font-bold">{settings?.hotline || '0909 123 456'}</p>
+              <p className="font-serif text-lg text-luxe-black tracking-wider leading-none font-bold">0909 123 456</p>
             </div>
           </div>
 
@@ -194,7 +255,7 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNaviga
   );
 };
 
-const Footer = ({ onConsult, settings }: { onConsult: () => void, settings: SiteSettings | null }) => (
+const Footer = ({ onConsult }: { onConsult: () => void }) => (
   <footer className="bg-luxe-black text-luxe-ivory pt-24 pb-12">
     <div className="max-w-7xl mx-auto px-6">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
@@ -207,7 +268,7 @@ const Footer = ({ onConsult, settings }: { onConsult: () => void, settings: Site
             />
           </div>
           <p className="text-white/40 text-sm leading-relaxed mb-8 max-w-xs">
-            {settings?.footerText || 'Chuyên cung cấp vật liệu trang trí nội thất cao cấp — nơi phong cách và chất lượng giao thoa, kiến tạo không gian sống đẳng cấp.'}
+            Chuyên cung cấp vật liệu trang trí nội thất cao cấp — nơi phong cách và chất lượng giao thoa, kiến tạo không gian sống đẳng cấp.
           </p>
           <div className="flex space-x-4">
             <a href="#" className="w-8 h-8 flex items-center justify-center border border-white/10 text-[10px] hover:border-luxe-champagne hover:text-luxe-champagne transition-all">FB</a>
@@ -242,15 +303,15 @@ const Footer = ({ onConsult, settings }: { onConsult: () => void, settings: Site
           <ul className="space-y-4 text-white/50 text-xs font-light">
             <li className="flex items-start space-x-3">
               <MapPin size={14} className="text-luxe-champagne mt-0.5" />
-              <span>{settings?.address || '123 Đường Lê Lợi, Quận 1, TP.HCM'}</span>
+              <span>123 Đường Lê Lợi, Quận 1, TP.HCM</span>
             </li>
             <li className="flex items-start space-x-3">
               <Phone size={14} className="text-luxe-champagne mt-0.5" />
-              <span>{settings?.hotline || '0909 123 456'}</span>
+              <span>0909 123 456</span>
             </li>
             <li className="flex items-start space-x-3">
               <Mail size={14} className="text-luxe-champagne mt-0.5" />
-              <span>{settings?.email || 'contact@luxedecor.vn'}</span>
+              <span>contact@luxedecor.vn</span>
             </li>
             <li className="flex items-start space-x-3">
               <Clock size={14} className="text-luxe-champagne mt-0.5" />
@@ -272,7 +333,7 @@ const Footer = ({ onConsult, settings }: { onConsult: () => void, settings: Site
 
 // --- Pages ---
 
-const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, onConsult: () => void }) => {
+const HomePage = ({ onNavigate, onConsult, onSelectProject }: { onNavigate: (p: Page) => void, onConsult: () => void, onSelectProject: (id: string) => void }) => {
   const [currentTestimonial, setCurrentTestimonial] = React.useState(0);
   const [phone, setPhone] = React.useState('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -283,7 +344,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
     if (!phone.trim()) return;
     
     setIsSubmitting(true);
-    // Simulate API call for pure front-end
+    // Simulate API call
     setTimeout(() => {
       setIsSuccess(true);
       setPhone('');
@@ -417,7 +478,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
               Xem tất cả bộ sưu tập →
             </button>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
               <img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&q=80" alt="Sàn gỗ tự nhiên" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
@@ -463,22 +524,6 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
               <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
                 <h3 className="font-serif text-2xl text-white mb-1">Thảm Cỏ Nhân Tạo</h3>
                 <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Sân Vườn • Ban Công</p>
-                <span className="text-white text-[10px] transition-transform duration-300 group-hover:translate-x-2">→ Khám phá</span>
-              </div>
-            </div>
-            <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80" alt="Phào chỉ" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
-                <h3 className="font-serif text-2xl text-white mb-1">Phào Chỉ</h3>
-                <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Trang Trí • Cổ Điển</p>
-                <span className="text-white text-[10px] transition-transform duration-300 group-hover:translate-x-2">→ Khám phá</span>
-              </div>
-            </div>
-            <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80" alt="Rèm cửa" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
-                <h3 className="font-serif text-2xl text-white mb-1">Rèm Cửa</h3>
-                <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Cao Cấp • Sang Trọng</p>
                 <span className="text-white text-[10px] transition-transform duration-300 group-hover:translate-x-2">→ Khám phá</span>
               </div>
             </div>
@@ -537,6 +582,52 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
                     <span className="font-serif text-luxe-gold text-lg">{item.priceStr}</span>
                     <button className="text-[10px] uppercase tracking-widest border border-luxe-champagne/30 px-5 py-2 hover:bg-luxe-gold hover:text-white transition-colors">Xem Chi Tiết</button>
                   </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Projects */}
+      <section className="py-24 bg-white">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
+            <div>
+              <div className="flex items-center space-x-3 mb-4">
+                <div className="h-[1px] w-8 bg-luxe-champagne"></div>
+                <span className="text-[10px] uppercase tracking-widest text-luxe-champagne font-semibold">Công Trình Thực Tế</span>
+              </div>
+              <h2 className="font-serif text-4xl md:text-5xl font-light">Dự Án <span className="text-luxe-gold">Tiêu Biểu</span></h2>
+            </div>
+            <button 
+              onClick={() => onNavigate('projects')}
+              className="text-[11px] uppercase tracking-widest text-luxe-gold border-b border-luxe-champagne/40 pb-1 hover:border-luxe-gold transition-all"
+            >
+              Xem tất cả dự án →
+            </button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {PROJECTS_DATA.slice(0, 3).map((project, idx) => (
+              <div 
+                key={idx} 
+                className="group cursor-pointer"
+                onClick={() => {
+                  onSelectProject(project.id);
+                  onNavigate('project-detail');
+                }}
+              >
+                <div className="aspect-[16/10] overflow-hidden mb-6 relative">
+                  <img src={project.img} alt={project.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" referrerPolicy="no-referrer" />
+                  <div className="absolute inset-0 bg-luxe-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
+                </div>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <MapPin size={12} className="text-luxe-gold" />
+                    <span className="text-[9px] uppercase tracking-widest text-luxe-text/60 font-medium">{project.location}</span>
+                  </div>
+                  <h3 className="font-serif text-xl group-hover:text-luxe-gold transition-colors">{project.title}</h3>
+                  <p className="text-luxe-text text-xs leading-relaxed opacity-60 line-clamp-2">{project.desc}</p>
                 </div>
               </div>
             ))}
@@ -874,7 +965,7 @@ const ProductListPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
   );
 };
 
-const ProductDetailPage = ({ onNavigate, onConsult, settings }: { onNavigate: (p: Page) => void, onConsult: () => void, settings: SiteSettings | null }) => {
+const ProductDetailPage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, onConsult: () => void }) => {
   return (
     <div className="pt-32 pb-24 animate-in fade-in zoom-in-95 duration-700">
       <div className="max-w-7xl mx-auto px-6 lg:px-12">
@@ -1068,52 +1159,7 @@ const SearchPage = ({ onNavigate, query }: { onNavigate: (p: Page) => void, quer
   );
 };
 
-const ProjectsPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
-  const projects = [
-    {
-      title: 'Biệt Thự Vinhomes Riverside',
-      location: 'Long Biên, Hà Nội',
-      category: 'Sàn Gỗ Tự Nhiên',
-      img: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80',
-      desc: 'Thi công trọn gói sàn gỗ Gõ Đỏ Lào cho toàn bộ không gian 3 tầng biệt thự.'
-    },
-    {
-      title: 'Penthouse Sunshine City',
-      location: 'Tây Hồ, Hà Nội',
-      category: 'Tấm Ốp Tường & Rèm',
-      img: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80',
-      desc: 'Sử dụng tấm ốp Nano vân đá kết hợp rèm cửa voan cao cấp tạo không gian hiện đại.'
-    },
-    {
-      title: 'Nhà Hàng Sen Tây Hồ',
-      location: 'Tây Hồ, Hà Nội',
-      category: 'Sàn Nhựa SPC',
-      img: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&q=80',
-      desc: 'Lắp đặt sàn nhựa SPC chịu lực cao cho khu vực sảnh chính và phòng VIP.'
-    },
-    {
-      title: 'Căn Hộ Goldmark City',
-      location: 'Bắc Từ Liêm, Hà Nội',
-      category: 'Giấy Dán Tường & Phào Chỉ',
-      img: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80',
-      desc: 'Trang trí phòng ngủ với giấy dán tường Hàn Quốc và phào chỉ tân cổ điển.'
-    },
-    {
-      title: 'Văn Phòng Techcombank',
-      location: 'Hoàn Kiếm, Hà Nội',
-      category: 'Thảm Cỏ & Sàn Gỗ',
-      img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80',
-      desc: 'Kiến tạo không gian xanh với thảm cỏ nhân tạo và sàn gỗ công nghiệp cao cấp.'
-    },
-    {
-      title: 'Showroom Mercedes-Benz',
-      location: 'Hải Phòng',
-      category: 'Sàn Nhựa Vinyl',
-      img: 'https://images.unsplash.com/photo-1567653418876-5bb0e566e1c2?auto=format&fit=crop&q=80',
-      desc: 'Sàn nhựa Vinyl chống trượt, chịu tải trọng lớn cho khu vực trưng bày xe.'
-    }
-  ];
-
+const ProjectsPage = ({ onNavigate, onSelectProject }: { onNavigate: (p: Page) => void, onSelectProject: (id: string) => void }) => {
   return (
     <div className="pt-20 animate-in fade-in slide-in-from-bottom-4 duration-700">
       {/* Banner */}
@@ -1134,8 +1180,12 @@ const ProjectsPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
 
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-          {projects.map((project, idx) => (
-            <div key={idx} className="group cursor-pointer">
+          {PROJECTS_DATA.map((project, idx) => (
+            <div 
+              key={idx} 
+              className="group cursor-pointer"
+              onClick={() => { onSelectProject(project.id); onNavigate('project-detail'); }}
+            >
               <div className="aspect-[16/10] overflow-hidden mb-8 relative">
                 <img src={project.img} alt={project.title} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-luxe-black/20 group-hover:bg-transparent transition-colors duration-500"></div>
@@ -1158,6 +1208,213 @@ const ProjectsPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
           ))}
         </div>
       </div>
+    </div>
+  );
+};
+
+const ProjectDetailPage = ({ onNavigate, projectId, onSelectProject, onOpenConsult }: { onNavigate: (p: Page) => void, projectId: string | null, onSelectProject: (id: string) => void, onOpenConsult: (title: string) => void }) => {
+  const project = PROJECTS_DATA.find(p => p.id === projectId) || PROJECTS_DATA[0];
+  const [activeImage, setActiveImage] = React.useState(project.img);
+
+  React.useEffect(() => {
+    setActiveImage(project.img);
+  }, [project]);
+
+  const allImages = [project.img, ...project.gallery];
+
+  return (
+    <div className="pt-32 pb-24 animate-in fade-in zoom-in-95 duration-700">
+      <div className="max-w-7xl mx-auto px-6 lg:px-12">
+        {/* Breadcrumb */}
+        <nav className="flex items-center gap-3 text-[10px] uppercase tracking-[0.2em] text-luxe-champagne font-medium mb-12">
+          <button onClick={() => onNavigate('home')} className="hover:text-luxe-gold transition-colors">Trang chủ</button>
+          <span className="h-[1px] w-4 bg-luxe-champagne/30"></span>
+          <button onClick={() => onNavigate('projects')} className="hover:text-luxe-gold transition-colors">Dự án</button>
+          <span className="h-[1px] w-4 bg-luxe-champagne/30"></span>
+          <span className="text-luxe-black">{project.title}</span>
+        </nav>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-32">
+          <div className="space-y-6">
+            <div className="aspect-[4/3] overflow-hidden bg-luxe-mid relative group">
+              <img src={activeImage} alt={project.title} className="w-full h-full object-cover transition-all duration-700" referrerPolicy="no-referrer" />
+            </div>
+            <div className="grid grid-cols-4 gap-4">
+              {allImages.map((img, i) => (
+                <div 
+                  key={i} 
+                  onClick={() => setActiveImage(img)}
+                  className={cn(
+                    "aspect-square border transition-all cursor-pointer overflow-hidden",
+                    activeImage === img ? "border-luxe-gold" : "border-luxe-champagne/10 hover:border-luxe-champagne"
+                  )}
+                >
+                  <img src={img} alt={`Gallery ${i}`} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col justify-center">
+            <div className="flex items-center space-x-4 mb-6">
+              <div className="h-[1px] w-12 bg-luxe-champagne"></div>
+              <span className="text-[10px] uppercase tracking-[0.4em] text-luxe-champagne font-medium">{project.category}</span>
+            </div>
+            <h1 className="font-serif text-5xl md:text-6xl font-light text-luxe-black leading-[1.1] mb-8">
+              {project.title}
+            </h1>
+            <div className="flex items-center gap-3 mb-10">
+              <MapPin size={18} className="text-luxe-gold" />
+              <span className="text-sm uppercase tracking-widest text-luxe-text/60 font-medium">{project.location}</span>
+            </div>
+            <p className="text-luxe-text text-base leading-relaxed opacity-80 mb-12">
+              {project.fullDesc}
+            </p>
+            
+            <div className="grid grid-cols-2 gap-12 py-10 border-y border-luxe-champagne/10 mb-12">
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-luxe-champagne font-bold mb-2">Hạng mục thi công</p>
+                <p className="text-luxe-black font-serif text-lg">{project.category}</p>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-widest text-luxe-champagne font-bold mb-2">Trạng thái</p>
+                <p className="text-luxe-black font-serif text-lg">Đã hoàn thành</p>
+              </div>
+            </div>
+
+            <button 
+              onClick={() => onOpenConsult(project.title)}
+              className="bg-luxe-black text-white px-10 py-5 text-[11px] uppercase tracking-[0.2em] hover:bg-luxe-gold transition-colors duration-300 self-start"
+            >
+              Tư vấn dự án tương tự
+            </button>
+          </div>
+        </div>
+
+        {/* Other Projects */}
+        <section className="py-24">
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="font-serif text-3xl">Các Dự Án Khác</h2>
+            <button onClick={() => onNavigate('projects')} className="text-[10px] uppercase tracking-widest text-luxe-gold border-b border-luxe-champagne/40 pb-1 hover:border-luxe-gold transition-all">Xem tất cả →</button>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {PROJECTS_DATA.filter(p => p.id !== projectId).slice(0, 3).map((item, idx) => (
+              <div 
+                key={idx} 
+                className="group cursor-pointer" 
+                onClick={() => { 
+                  onSelectProject(item.id);
+                  onNavigate('project-detail'); 
+                  window.scrollTo(0, 0);
+                }}
+              >
+                <div className="aspect-[16/10] overflow-hidden mb-6 bg-luxe-mid">
+                  <img src={item.img} alt={item.title} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" referrerPolicy="no-referrer" />
+                </div>
+                <h4 className="font-serif text-xl mb-2 group-hover:text-luxe-gold transition-colors">{item.title}</h4>
+                <p className="text-luxe-text/60 text-[10px] uppercase tracking-widest">{item.location}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+const ConsultModal = ({ isOpen, onClose, projectTitle }: { isOpen: boolean, onClose: () => void, projectTitle: string | null }) => {
+  const [formData, setFormData] = React.useState({ name: '', phone: '' });
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+  const [isSuccess, setIsSuccess] = React.useState(false);
+
+  if (!isOpen) return null;
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!formData.phone.trim() || !formData.name.trim()) return;
+
+    setIsSubmitting(true);
+    setTimeout(() => {
+      setIsSuccess(true);
+      setIsSubmitting(false);
+      setTimeout(() => {
+        setIsSuccess(false);
+        setFormData({ name: '', phone: '' });
+        onClose();
+      }, 3000);
+    }, 1500);
+  };
+
+  return (
+    <div className="fixed inset-0 z-[110] flex items-center justify-center p-6">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-luxe-black/80 backdrop-blur-sm"
+      />
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        className="relative w-full max-w-md bg-white p-10 shadow-2xl overflow-hidden"
+      >
+        <button onClick={onClose} className="absolute top-6 right-6 text-luxe-black/40 hover:text-luxe-gold transition-colors">
+          <X size={24} />
+        </button>
+
+        <div className="mb-8">
+          <div className="flex items-center space-x-3 mb-4">
+            <div className="h-[1px] w-8 bg-luxe-gold"></div>
+            <span className="text-[10px] uppercase tracking-widest text-luxe-gold font-bold">Yêu cầu tư vấn</span>
+          </div>
+          <h3 className="font-serif text-3xl text-luxe-black mb-2">Dự án tương tự</h3>
+          <p className="text-luxe-text/60 text-xs uppercase tracking-widest font-medium">{projectTitle}</p>
+        </div>
+
+        {isSuccess ? (
+          <div className="py-12 text-center animate-in fade-in zoom-in-95 duration-500">
+            <div className="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-6">
+              <CheckCircle2 size={40} />
+            </div>
+            <h4 className="font-serif text-2xl mb-2">Gửi thành công!</h4>
+            <p className="text-luxe-text opacity-70 text-sm">Chúng tôi sẽ gọi lại cho bạn trong vòng 30 phút.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-luxe-champagne font-bold mb-2">
+                Họ và tên <span className="text-luxe-text/40 normal-case font-normal italic ml-2">(Chúng tôi gọi bạn là gì?)</span>
+              </label>
+              <input 
+                autoFocus
+                type="text" 
+                required
+                value={formData.name}
+                onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
+                placeholder="Nhập tên của bạn..."
+                className="w-full border-b border-luxe-champagne/30 py-3 text-luxe-black placeholder:text-luxe-black/20 outline-none focus:border-luxe-gold transition-colors"
+              />
+            </div>
+            <div>
+              <label className="block text-[10px] uppercase tracking-widest text-luxe-champagne font-bold mb-2">Số điện thoại</label>
+              <input 
+                type="tel" 
+                required
+                value={formData.phone}
+                onChange={(e) => setFormData(prev => ({ ...prev, phone: e.target.value }))}
+                placeholder="Nhập số điện thoại..."
+                className="w-full border-b border-luxe-champagne/30 py-3 text-luxe-black placeholder:text-luxe-black/20 outline-none focus:border-luxe-gold transition-colors"
+              />
+            </div>
+            <button 
+              disabled={isSubmitting}
+              className="w-full bg-luxe-black text-white py-5 text-[11px] uppercase tracking-[0.2em] font-bold hover:bg-luxe-gold transition-colors duration-300 disabled:opacity-50 mt-4"
+            >
+              {isSubmitting ? 'Đang xử lý...' : 'Gửi yêu cầu ngay'}
+            </button>
+          </form>
+        )}
+      </motion.div>
     </div>
   );
 };
@@ -1238,15 +1495,13 @@ const SearchOverlay = ({ isOpen, onClose, onNavigate, onSearch }: { isOpen: bool
   );
 };
 
-
-
-
 export default function App() {
   const [currentPage, setCurrentPage] = React.useState<Page>('home');
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
-  // Settings can be fetched from normal API later, for now we use null (will fallback to default static values)
-  const [settings, setSettings] = React.useState<SiteSettings | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = React.useState<string | null>(null);
+  const [isConsultModalOpen, setIsConsultModalOpen] = React.useState(false);
+  const [consultProjectTitle, setConsultProjectTitle] = React.useState<string | null>(null);
 
   const scrollToContact = () => {
     if (currentPage !== 'home') {
@@ -1261,14 +1516,14 @@ export default function App() {
     }
   };
 
-  // Placeholder for any API fetch effects
-  React.useEffect(() => {
-    // e.g. setSettings(await fetchSettings());
-  }, []);
-
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [currentPage]);
+
+  const handleOpenConsult = (title: string) => {
+    setConsultProjectTitle(title);
+    setIsConsultModalOpen(true);
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -1276,18 +1531,18 @@ export default function App() {
         onNavigate={setCurrentPage} 
         currentPage={currentPage} 
         onSearchClick={() => setIsSearchOpen(true)}
-        settings={settings}
       />
       
       <main className="flex-grow">
-        {currentPage === 'home' && <HomePage onNavigate={setCurrentPage} onConsult={scrollToContact} />}
+        {currentPage === 'home' && <HomePage onNavigate={setCurrentPage} onConsult={scrollToContact} onSelectProject={setSelectedProjectId} />}
         {currentPage === 'list' && <ProductListPage onNavigate={setCurrentPage} />}
-        {currentPage === 'detail' && <ProductDetailPage onNavigate={setCurrentPage} onConsult={scrollToContact} settings={settings} />}
-        {currentPage === 'projects' && <ProjectsPage onNavigate={setCurrentPage} />}
+        {currentPage === 'detail' && <ProductDetailPage onNavigate={setCurrentPage} onConsult={scrollToContact} />}
+        {currentPage === 'projects' && <ProjectsPage onNavigate={setCurrentPage} onSelectProject={setSelectedProjectId} />}
+        {currentPage === 'project-detail' && <ProjectDetailPage onNavigate={setCurrentPage} projectId={selectedProjectId} onSelectProject={setSelectedProjectId} onOpenConsult={handleOpenConsult} />}
         {currentPage === 'search' && <SearchPage onNavigate={setCurrentPage} query={searchQuery} />}
       </main>
 
-      <Footer onConsult={scrollToContact} settings={settings} />
+      <Footer onConsult={scrollToContact} />
 
       <SearchOverlay 
         isOpen={isSearchOpen} 
@@ -1296,9 +1551,15 @@ export default function App() {
         onSearch={setSearchQuery}
       />
 
+      <ConsultModal 
+        isOpen={isConsultModalOpen}
+        onClose={() => setIsConsultModalOpen(false)}
+        projectTitle={consultProjectTitle}
+      />
+
       {/* Floating Hotline Button */}
       <a 
-        href={`tel:${settings?.hotline?.replace(/\s/g, '') || '0909123456'}`} 
+        href="tel:0909123456" 
         className="fixed bottom-8 right-8 z-[60] flex items-center gap-3 bg-luxe-gold text-white px-6 py-4 rounded-full shadow-2xl shadow-luxe-gold/40 hover:scale-105 transition-transform duration-300 group"
       >
         <div className="relative">
@@ -1307,7 +1568,7 @@ export default function App() {
         </div>
         <div className="flex flex-col">
           <span className="text-[10px] uppercase tracking-widest font-bold leading-none mb-1">Tư vấn ngay</span>
-          <span className="font-serif text-lg leading-none font-bold">{settings?.hotline || '0909 123 456'}</span>
+          <span className="font-serif text-lg leading-none font-bold">0909 123 456</span>
         </div>
       </a>
 
