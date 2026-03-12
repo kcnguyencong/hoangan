@@ -2,30 +2,8 @@ import React from 'react';
 import { Phone, Search, Menu, X, Facebook, Instagram, Youtube, MapPin, Mail, Clock, ChevronLeft, ChevronRight, LayoutDashboard, LogOut, Plus, Edit2, Trash2, Save, Settings, FileText, Package, Users, CheckCircle2, AlertCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './lib/utils';
-import { db, auth } from './firebase';
-import AdminPage, { UserProfile, Page, SiteSettings } from './AdminPage';
-import { 
-  collection, 
-  onSnapshot, 
-  query, 
-  orderBy, 
-  addDoc, 
-  updateDoc, 
-  deleteDoc, 
-  doc, 
-  serverTimestamp, 
-  getDoc, 
-  setDoc,
-  getDocs
-} from 'firebase/firestore';
-import { 
-  onAuthStateChanged, 
-  signOut,
-  User
-} from 'firebase/auth';
-
 // --- Types ---
-type Page = 'home' | 'list' | 'detail' | 'projects' | 'search' | 'admin';
+type Page = 'home' | 'list' | 'detail' | 'projects' | 'search';
 
 interface Product {
   id: string;
@@ -79,7 +57,7 @@ const PRODUCTS = [
 
 // --- Components ---
 
-const Navbar = ({ onNavigate, currentPage, onSearchClick, user, settings }: { onNavigate: (p: Page) => void, currentPage: Page, onSearchClick: () => void, user: User | null, settings: SiteSettings | null }) => {
+const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNavigate: (p: Page) => void, currentPage: Page, onSearchClick: () => void, settings: SiteSettings | null }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const [isMegaMenuOpen, setIsMegaMenuOpen] = React.useState(false);
 
@@ -173,20 +151,6 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, user, settings }: { on
               Dự Án
             </button>
           </li>
-          {user && user.email === "vodkato.vodkanho@gmail.com" && (
-            <li>
-              <button 
-                onClick={() => onNavigate('admin')}
-                className={cn(
-                  "relative transition-colors duration-300 hover:text-luxe-gold flex items-center gap-2",
-                  currentPage === 'admin' && "text-luxe-gold"
-                )}
-              >
-                <LayoutDashboard size={16} />
-                Admin
-              </button>
-            </li>
-          )}
         </ul>
 
         <div className="flex items-center space-x-6">
@@ -319,20 +283,13 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
     if (!phone.trim()) return;
     
     setIsSubmitting(true);
-    try {
-      await addDoc(collection(db, 'consultations'), {
-        phone: phone,
-        createdAt: serverTimestamp(),
-        status: 'pending'
-      });
+    // Simulate API call for pure front-end
+    setTimeout(() => {
       setIsSuccess(true);
       setPhone('');
-      setTimeout(() => setIsSuccess(false), 5000);
-    } catch (error) {
-      console.error("Error adding consultation: ", error);
-    } finally {
       setIsSubmitting(false);
-    }
+      setTimeout(() => setIsSuccess(false), 5000);
+    }, 1000);
   };
   const testimonials = [
     { name: 'Chị Minh Anh', role: 'Chủ biệt thự Vinhomes', text: 'Tôi rất hài lòng với sàn gỗ Sồi Mỹ của LuxeDecor. Màu sắc sang trọng, thi công rất tỉ mỉ và chuyên nghiệp.' },
@@ -1281,480 +1238,14 @@ const SearchOverlay = ({ isOpen, onClose, onNavigate, onSearch }: { isOpen: bool
   );
 };
 
-                  {consultations.map(item => (
-                    <tr key={item.id} className="hover:bg-luxe-cream/50 transition-colors">
-                      <td className="px-6 py-4 text-xs">
-                        {item.createdAt?.toDate ? item.createdAt.toDate().toLocaleString('vi-VN') : 'Đang xử lý...'}
-                      </td>
-                      <td className="px-6 py-4 font-serif text-lg">{item.phone}</td>
-                      <td className="px-6 py-4">
-                        <select 
-                          value={item.status}
-                          onChange={async (e) => {
-                            try {
-                              await updateDoc(doc(db, 'consultations', item.id), { status: e.target.value });
-                            } catch (err) { console.error(err); }
-                          }}
-                          className={cn(
-                            "text-[10px] uppercase tracking-widest font-bold border-none bg-transparent focus:ring-0 cursor-pointer",
-                            item.status === 'pending' ? "text-amber-500" : 
-                            item.status === 'contacted' ? "text-blue-500" : "text-emerald-500"
-                          )}
-                        >
-                          <option value="pending">Chờ xử lý</option>
-                          <option value="contacted">Đã liên hệ</option>
-                          <option value="closed">Hoàn tất</option>
-                        </select>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <button 
-                          onClick={() => handleDelete('consultations', item.id)}
-                          className="text-red-400 hover:text-red-600 transition-colors"
-                        >
-                          <Trash2 size={18} />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
 
-        {/* Categories Tab */}
-        {activeTab === 'categories' && (
-          <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <h3 className="font-serif text-2xl">Quản lý danh mục</h3>
-              <button 
-                onClick={() => { setShowForm(true); setEditingId(null); }}
-                className="bg-luxe-gold text-white px-6 py-3 text-[10px] uppercase tracking-widest font-bold hover:bg-luxe-black transition-all flex items-center gap-2"
-              >
-                <Plus size={16} /> Thêm danh mục
-              </button>
-            </div>
-
-            {showForm && (
-              <div className="bg-white border border-luxe-champagne/10 p-8 shadow-md animate-in fade-in slide-in-from-top-4 duration-300">
-                <div className="flex justify-between items-center mb-6">
-                  <h4 className="font-serif text-xl">{editingId ? 'Chỉnh sửa danh mục' : 'Thêm danh mục mới'}</h4>
-                  <button onClick={() => setShowForm(false)} className="text-luxe-text/40 hover:text-red-500"><XCircle size={20} /></button>
-                </div>
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  handleSave('categories', {
-                    name: formData.get('name'),
-                    slug: formData.get('slug') || (formData.get('name') as string).toLowerCase().replace(/\s+/g, '-')
-                  });
-                }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Tên danh mục</label>
-                    <input name="name" required defaultValue={editingId ? categories.find(c => c.id === editingId)?.name : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Slug (Tùy chọn)</label>
-                    <input name="slug" defaultValue={editingId ? categories.find(c => c.id === editingId)?.slug : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="md:col-span-2">
-                    <button type="submit" className="bg-luxe-black text-white px-8 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all">Lưu danh mục</button>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {categories.map(cat => (
-                <div key={cat.id} className="bg-white border border-luxe-champagne/10 p-6 flex justify-between items-center group hover:border-luxe-gold transition-all">
-                  <div>
-                    <h4 className="font-serif text-lg text-luxe-black">{cat.name}</h4>
-                    <p className="text-[10px] text-luxe-text/40 uppercase tracking-widest">{cat.slug}</p>
-                  </div>
-                  <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button onClick={() => { setEditingId(cat.id!); setShowForm(true); }} className="text-luxe-gold hover:text-luxe-black"><Edit2 size={16} /></button>
-                    <button onClick={() => handleDelete('categories', cat.id!)} className="text-red-400 hover:text-red-600"><Trash2 size={16} /></button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Products Tab */}
-        {activeTab === 'products' && (
-          <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <h3 className="font-serif text-2xl">Quản lý sản phẩm</h3>
-              <button 
-                onClick={() => { setShowForm(true); setEditingId(null); }}
-                className="bg-luxe-gold text-white px-6 py-3 text-[10px] uppercase tracking-widest font-bold hover:bg-luxe-black transition-all flex items-center gap-2"
-              >
-                <Plus size={16} /> Thêm sản phẩm
-              </button>
-            </div>
-
-            {showForm && (
-              <div className="bg-white border border-luxe-champagne/10 p-8 shadow-md">
-                <div className="flex justify-between items-center mb-6">
-                  <h4 className="font-serif text-xl">{editingId ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm mới'}</h4>
-                  <button onClick={() => setShowForm(false)} className="text-luxe-text/40 hover:text-red-500"><XCircle size={20} /></button>
-                </div>
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const price = Number(formData.get('price'));
-                  handleSave('products', {
-                    title: formData.get('title'),
-                    cat: formData.get('cat'),
-                    price: price,
-                    priceStr: price.toLocaleString('vi-VN') + '₫',
-                    img: formData.get('img'),
-                    tag: formData.get('tag'),
-                    description: formData.get('description')
-                  });
-                }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Tên sản phẩm</label>
-                    <input name="title" required defaultValue={editingId ? products.find(p => p.id === editingId)?.title : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Danh mục</label>
-                    <select name="cat" required defaultValue={editingId ? products.find(p => p.id === editingId)?.cat : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none">
-                      {categories.map(c => <option key={c.id} value={c.name}>{c.name}</option>)}
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Giá (m²)</label>
-                    <input name="price" type="number" required defaultValue={editingId ? products.find(p => p.id === editingId)?.price : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Link ảnh</label>
-                    <input name="img" required defaultValue={editingId ? products.find(p => p.id === editingId)?.img : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Mô tả</label>
-                    <textarea name="description" rows={3} defaultValue={editingId ? products.find(p => p.id === editingId)?.description : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="md:col-span-2">
-                    <button type="submit" className="bg-luxe-black text-white px-8 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all">Lưu sản phẩm</button>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              {products.map(product => (
-                <div key={product.id} className="bg-white border border-luxe-champagne/10 group hover:border-luxe-gold transition-all overflow-hidden">
-                  <div className="aspect-square bg-luxe-mid relative">
-                    <img src={product.img} alt={product.title} className="w-full h-full object-cover" />
-                    <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => { setEditingId(product.id!); setShowForm(true); }} className="p-2 bg-white text-luxe-gold rounded-full shadow-lg"><Edit2 size={14} /></button>
-                      <button onClick={() => handleDelete('products', product.id!)} className="p-2 bg-white text-red-500 rounded-full shadow-lg"><Trash2 size={14} /></button>
-                    </div>
-                  </div>
-                  <div className="p-4">
-                    <p className="text-[9px] uppercase tracking-widest text-luxe-gold font-bold mb-1">{product.cat}</p>
-                    <h4 className="font-serif text-base text-luxe-black mb-2 line-clamp-1">{product.title}</h4>
-                    <p className="text-luxe-gold font-bold">{product.priceStr}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Projects Tab */}
-        {activeTab === 'projects' && (
-          <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <h3 className="font-serif text-2xl">Quản lý dự án</h3>
-              <button 
-                onClick={() => { setShowForm(true); setEditingId(null); }}
-                className="bg-luxe-gold text-white px-6 py-3 text-[10px] uppercase tracking-widest font-bold hover:bg-luxe-black transition-all flex items-center gap-2"
-              >
-                <Plus size={16} /> Thêm dự án
-              </button>
-            </div>
-
-            {showForm && (
-              <div className="bg-white border border-luxe-champagne/10 p-8 shadow-md">
-                <div className="flex justify-between items-center mb-6">
-                  <h4 className="font-serif text-xl">{editingId ? 'Chỉnh sửa dự án' : 'Thêm dự án mới'}</h4>
-                  <button onClick={() => setShowForm(false)} className="text-luxe-text/40 hover:text-red-500"><XCircle size={20} /></button>
-                </div>
-                <form onSubmit={(e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  handleSave('projects', {
-                    title: formData.get('title'),
-                    location: formData.get('location'),
-                    category: formData.get('category'),
-                    img: formData.get('img'),
-                    desc: formData.get('desc')
-                  });
-                }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Tên dự án</label>
-                    <input name="title" required defaultValue={editingId ? projects.find(p => p.id === editingId)?.title : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Địa điểm</label>
-                    <input name="location" required defaultValue={editingId ? projects.find(p => p.id === editingId)?.location : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Loại hình</label>
-                    <input name="category" required defaultValue={editingId ? projects.find(p => p.id === editingId)?.category : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Link ảnh</label>
-                    <input name="img" required defaultValue={editingId ? projects.find(p => p.id === editingId)?.img : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2 md:col-span-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Mô tả ngắn</label>
-                    <textarea name="desc" rows={3} defaultValue={editingId ? projects.find(p => p.id === editingId)?.desc : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="md:col-span-2">
-                    <button type="submit" className="bg-luxe-black text-white px-8 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all">Lưu dự án</button>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
-              {projects.map(project => (
-                <div key={project.id} className="bg-white border border-luxe-champagne/10 group hover:border-luxe-gold transition-all overflow-hidden">
-                  <div className="aspect-[16/10] bg-luxe-mid relative">
-                    <img src={project.img} alt={project.title} className="w-full h-full object-cover" />
-                    <div className="absolute top-2 right-2 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button onClick={() => { setEditingId(project.id!); setShowForm(true); }} className="p-2 bg-white text-luxe-gold rounded-full shadow-lg"><Edit2 size={14} /></button>
-                      <button onClick={() => handleDelete('projects', project.id!)} className="p-2 bg-white text-red-500 rounded-full shadow-lg"><Trash2 size={14} /></button>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="text-[9px] uppercase tracking-widest text-luxe-gold font-bold">{project.category}</span>
-                      <span className="w-1 h-1 bg-luxe-champagne rounded-full"></span>
-                      <span className="text-[9px] uppercase tracking-widest text-luxe-text/60">{project.location}</span>
-                    </div>
-                    <h4 className="font-serif text-xl text-luxe-black mb-3">{project.title}</h4>
-                    <p className="text-xs text-luxe-text/60 line-clamp-2">{project.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Users Tab */}
-        {activeTab === 'users' && user.role === 'admin' && (
-          <div className="space-y-8">
-            <div className="flex justify-between items-center">
-              <h3 className="font-serif text-2xl">Quản lý người dùng</h3>
-              <button 
-                onClick={() => { setShowForm(true); setEditingId(null); }}
-                className="bg-luxe-gold text-white px-6 py-3 text-[10px] uppercase tracking-widest font-bold hover:bg-luxe-black transition-all flex items-center gap-2"
-              >
-                <UserPlus size={16} /> Thêm người dùng
-              </button>
-            </div>
-
-            {showForm && (
-              <div className="bg-white border border-luxe-champagne/10 p-8 shadow-md">
-                <div className="flex justify-between items-center mb-6">
-                  <h4 className="font-serif text-xl">{editingId ? 'Chỉnh sửa người dùng' : 'Thêm người dùng mới'}</h4>
-                  <button onClick={() => setShowForm(false)} className="text-luxe-text/40 hover:text-red-500"><XCircle size={20} /></button>
-                </div>
-                <form onSubmit={async (e) => {
-                  e.preventDefault();
-                  const formData = new FormData(e.currentTarget);
-                  const email = formData.get('email') as string;
-                  const role = formData.get('role') as any;
-                  const displayName = formData.get('displayName') as string;
-                  const password = formData.get('password') as string;
-
-                  try {
-                    if (editingId) {
-                      await updateDoc(doc(db, 'users', editingId), { displayName, role });
-                    } else {
-                      // Note: Creating a user in Firebase Auth from client is tricky if we want to stay logged in as admin.
-                      // For this demo, we'll just create the document. In a real app, you'd use a Cloud Function.
-                      // But since we are using email/password, we can try to create it.
-                      // WARNING: This will sign out the current admin! 
-                      // Better approach: Just save to Firestore and tell admin to have user sign up or use a function.
-                      // For now, let's just save the profile.
-                      await setDoc(doc(db, 'users', email.replace(/[@.]/g, '_')), {
-                        email,
-                        displayName,
-                        role,
-                        createdAt: serverTimestamp()
-                      });
-                      alert('Đã tạo hồ sơ người dùng. Người dùng này cần đăng ký tài khoản với email này để truy cập.');
-                    }
-                    setShowForm(false);
-                  } catch (err) { console.error(err); }
-                }} className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Email</label>
-                    <input name="email" type="email" required disabled={!!editingId} defaultValue={editingId ? users.find(u => u.id === editingId)?.email : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none disabled:bg-luxe-mid" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Tên hiển thị</label>
-                    <input name="displayName" required defaultValue={editingId ? users.find(u => u.id === editingId)?.displayName : ''} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Vai trò</label>
-                    <select name="role" required defaultValue={editingId ? users.find(u => u.id === editingId)?.role : 'editor'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none">
-                      <option value="admin">Admin (Toàn quyền)</option>
-                      <option value="editor">Editor (Chỉ sửa nội dung)</option>
-                    </select>
-                  </div>
-                  <div className="md:col-span-2">
-                    <button type="submit" className="bg-luxe-black text-white px-8 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all">Lưu người dùng</button>
-                  </div>
-                </form>
-              </div>
-            )}
-
-            <div className="bg-white border border-luxe-champagne/10 shadow-sm overflow-hidden">
-              <table className="w-full text-left">
-                <thead>
-                  <tr className="text-[10px] uppercase tracking-widest text-luxe-text/60 border-b border-luxe-champagne/10">
-                    <th className="px-6 py-4 font-bold">Người dùng</th>
-                    <th className="px-6 py-4 font-bold">Vai trò</th>
-                    <th className="px-6 py-4 font-bold">Ngày tạo</th>
-                    <th className="px-6 py-4 font-bold text-right">Thao tác</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-luxe-champagne/10">
-                  {users.map(u => (
-                    <tr key={u.id} className="hover:bg-luxe-cream/50 transition-colors">
-                      <td className="px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="w-8 h-8 bg-luxe-gold/10 text-luxe-gold rounded-full flex items-center justify-center text-xs font-bold">
-                            {u.displayName?.charAt(0) || u.email.charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <p className="font-bold text-sm">{u.displayName || 'Chưa đặt tên'}</p>
-                            <p className="text-[10px] text-luxe-text/40">{u.email}</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="px-6 py-4">
-                        <span className={cn(
-                          "text-[9px] uppercase tracking-widest font-bold px-2 py-1 rounded-full",
-                          u.role === 'admin' ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"
-                        )}>
-                          {u.role}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-xs text-luxe-text/60">
-                        {u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString('vi-VN') : '---'}
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="flex justify-end gap-3">
-                          <button onClick={() => { setEditingId(u.id); setShowForm(true); }} className="text-luxe-gold hover:text-luxe-black"><Edit2 size={16} /></button>
-                          <button onClick={() => handleDelete('users', u.id)} className="text-red-400 hover:text-red-600"><Trash2 size={16} /></button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        )}
-
-        {/* Settings Tab */}
-        {activeTab === 'settings' && (
-          <div className="max-w-2xl">
-            <div className="bg-white border border-luxe-champagne/10 p-10 shadow-sm">
-              <h3 className="font-serif text-2xl mb-8 border-b border-luxe-champagne/10 pb-4">Cấu hình Website</h3>
-              <form className="space-y-6" onSubmit={async (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.currentTarget);
-                const data = {
-                  hotline: formData.get('hotline'),
-                  email: formData.get('email'),
-                  address: formData.get('address'),
-                  footerText: formData.get('footerText'),
-                };
-                try {
-                  await setDoc(doc(db, 'settings', 'global'), data);
-                  alert('Đã cập nhật cấu hình!');
-                } catch (err) {
-                  console.error(err);
-                }
-              }}>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Số điện thoại Hotline</label>
-                  <input name="hotline" defaultValue={settings?.hotline || '0909 123 456'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Email liên hệ</label>
-                  <input name="email" defaultValue={settings?.email || 'contact@luxedecor.vn'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Địa chỉ văn phòng</label>
-                  <input name="address" defaultValue={settings?.address || '123 Đường Lê Lợi, Quận 1, TP.HCM'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Mô tả Footer</label>
-                  <textarea name="footerText" rows={4} defaultValue={settings?.footerText || 'Chuyên cung cấp vật liệu trang trí nội thất cao cấp — nơi phong cách và chất lượng giao thoa, kiến tạo không gian sống đẳng cấp.'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                </div>
-                <button type="submit" className="w-full bg-luxe-black text-white py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all flex items-center justify-center gap-3">
-                  <Save size={16} />
-                  Lưu cấu hình
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
-none" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Email liên hệ</label>
-                  <input name="email" defaultValue={settings?.email || 'contact@luxedecor.vn'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Địa chỉ văn phòng</label>
-                  <input name="address" defaultValue={settings?.address || '123 Đường Lê Lợi, Quận 1, TP.HCM'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] uppercase tracking-widest font-bold text-luxe-champagne">Mô tả Footer</label>
-                  <textarea name="footerText" rows={4} defaultValue={settings?.footerText || 'Chuyên cung cấp vật liệu trang trí nội thất cao cấp — nơi phong cách và chất lượng giao thoa, kiến tạo không gian sống đẳng cấp.'} className="w-full border border-luxe-champagne/20 px-4 py-3 text-sm focus:border-luxe-gold outline-none" />
-                </div>
-                <button type="submit" className="w-full bg-luxe-black text-white py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all flex items-center justify-center gap-3">
-                  <Save size={16} />
-                  Lưu cấu hình
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
-
-        {(activeTab === 'products' || activeTab === 'projects') && (
-          <div className="bg-white border border-luxe-champagne/10 p-20 text-center shadow-sm">
-            <LayoutDashboard size={48} className="mx-auto text-luxe-champagne/20 mb-6" />
-            <h3 className="font-serif text-2xl mb-4">Tính năng đang phát triển</h3>
-            <p className="text-luxe-text opacity-60 max-w-md mx-auto">Bạn có thể quản lý {activeTab === 'products' ? 'sản phẩm' : 'dự án'} trực tiếp trên Firebase Console trong lúc tôi hoàn thiện giao diện này.</p>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
 
 
 export default function App() {
   const [currentPage, setCurrentPage] = React.useState<Page>('home');
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [user, setUser] = React.useState<UserProfile | null>(null);
+  // Settings can be fetched from normal API later, for now we use null (will fallback to default static values)
   const [settings, setSettings] = React.useState<SiteSettings | null>(null);
 
   const scrollToContact = () => {
@@ -1770,35 +1261,9 @@ export default function App() {
     }
   };
 
+  // Placeholder for any API fetch effects
   React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (u) => {
-      if (u) {
-        // Fetch user role from Firestore
-        const userDoc = await getDoc(doc(db, 'users', u.uid));
-        if (userDoc.exists()) {
-          setUser({ ...u, role: userDoc.data().role } as UserProfile);
-        } else {
-          // Fallback for default admin or first time login
-          if (u.email === "vodkato.vodkanho@gmail.com") {
-            setUser({ ...u, role: 'admin' } as UserProfile);
-          } else {
-            setUser(u as UserProfile);
-          }
-        }
-      } else {
-        setUser(null);
-      }
-    });
-    return () => unsubscribe();
-  }, []);
-
-  React.useEffect(() => {
-    const unsubSettings = onSnapshot(doc(db, 'settings', 'global'), (doc) => {
-      if (doc.exists()) {
-        setSettings(doc.data() as SiteSettings);
-      }
-    });
-    return () => unsubSettings();
+    // e.g. setSettings(await fetchSettings());
   }, []);
 
   React.useEffect(() => {
@@ -1811,7 +1276,6 @@ export default function App() {
         onNavigate={setCurrentPage} 
         currentPage={currentPage} 
         onSearchClick={() => setIsSearchOpen(true)}
-        user={user}
         settings={settings}
       />
       
@@ -1821,7 +1285,6 @@ export default function App() {
         {currentPage === 'detail' && <ProductDetailPage onNavigate={setCurrentPage} onConsult={scrollToContact} settings={settings} />}
         {currentPage === 'projects' && <ProjectsPage onNavigate={setCurrentPage} />}
         {currentPage === 'search' && <SearchPage onNavigate={setCurrentPage} query={searchQuery} />}
-        {currentPage === 'admin' && <AdminPage onNavigate={setCurrentPage} user={user} />}
       </main>
 
       <Footer onConsult={scrollToContact} settings={settings} />
