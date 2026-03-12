@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Quicksand", sans-serif;
+  --font-sans: "Quicksand", sans-serif;
+
+  --color-luxe-cream: #FBF8F3;
+  --color-luxe-mid: #F4EDE0;
+  --color-luxe-dark: #EDE0CC;
+  --color-luxe-champagne: #B8924A;
+  --color-luxe-gold: #8C6820;
+  --color-luxe-deep: #6B4E10;
+  --color-luxe-ivory: #FEFCF8;
+  --color-luxe-black: #1E1608;
+  --color-luxe-text: #4A3520;
+}
+
+@layer base {
+  body {
+    @apply bg-luxe-ivory text-luxe-black font-sans antialiased font-medium;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-sans font-bold;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(254, 252, 248, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+  
+  .cat-card-overlay {
+    background: linear-gradient(to top, rgba(30, 22, 8, 0.9) 0%, rgba(30, 22, 8, 0.2) 60%, transparent 100%);
+  }
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');

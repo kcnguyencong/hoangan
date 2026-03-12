@@ -1,0 +1,88 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "A product sold on the website",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Product name" },
+        "cat": { "type": "string", "description": "Category name" },
+        "price": { "type": "number", "description": "Price per m2" },
+        "priceStr": { "type": "string", "description": "Formatted price string" },
+        "img": { "type": "string", "description": "Image URL" },
+        "tag": { "type": "string", "description": "Optional tag like 'Best Seller'" },
+        "color": { "type": "string", "description": "Color hex code" },
+        "description": { "type": "string", "description": "Product description" },
+        "specs": { "type": "object", "description": "Technical specifications" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "cat", "price", "img"]
+    },
+    "Category": {
+      "title": "Category",
+      "description": "Product category",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "description": "Category name" },
+        "slug": { "type": "string", "description": "URL slug" }
+      },
+      "required": ["name"]
+    },
+    "Project": {
+      "title": "Project",
+      "description": "A completed project showcase",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "description": "Project title" },
+        "location": { "type": "string", "description": "Project location" },
+        "category": { "type": "string", "description": "Type of work" },
+        "img": { "type": "string", "description": "Main project image" },
+        "desc": { "type": "string", "description": "Brief description" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "img"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Global website settings",
+      "type": "object",
+      "properties": {
+        "hotline": { "type": "string", "description": "Hotline phone number" },
+        "footerText": { "type": "string", "description": "Footer description text" },
+        "address": { "type": "string", "description": "Office address" },
+        "email": { "type": "string", "description": "Contact email" }
+      }
+    },
+    "Consultation": {
+      "title": "Consultation",
+      "description": "Customer request for consultation",
+      "type": "object",
+      "properties": {
+        "phone": { "type": "string", "description": "Customer phone number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "status": { "type": "string", "enum": ["pending", "contacted", "closed"] }
+      },
+      "required": ["phone"]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "System administrator",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string", "description": "Admin email" },
+        "displayName": { "type": "string", "description": "Admin name" },
+        "role": { "type": "string", "enum": ["admin", "editor"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["email", "role"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": { "schema": "Product", "description": "Collection of products" },
+    "/categories/{categoryId}": { "schema": "Category", "description": "Collection of categories" },
+    "/projects/{projectId}": { "schema": "Project", "description": "Collection of projects" },
+    "/settings/global": { "schema": "SiteSettings", "description": "Global site settings document" },
+    "/consultations/{id}": { "schema": "Consultation", "description": "Customer consultation requests" },
+    "/users/{userId}": { "schema": "AdminUser", "description": "Collection of system users" }
+  }
+}
