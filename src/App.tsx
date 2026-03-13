@@ -80,20 +80,20 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNaviga
     <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-luxe-champagne/10">
       <div className="max-w-7xl mx-auto px-6 lg:px-12 h-20 flex items-center justify-between">
         <div className="flex items-center space-x-2 cursor-pointer" onClick={() => onNavigate('home')}>
-          <img 
-            src="https://storage.googleapis.com/static.antigravity.dev/projects/fpgvvfozh5rlgizskkepiy/logo.png" 
-            alt="Hoangan Decor" 
+          <img
+            src="/logo.png"
+            alt="Hoangan Decor"
             className="h-12 w-auto"
           />
         </div>
 
         <ul className="hidden md:flex items-center space-x-10 text-[13px] uppercase tracking-[0.2em] font-medium text-luxe-text h-full">
-          <li 
+          <li
             className="h-full flex items-center relative group"
             onMouseEnter={() => setIsMegaMenuOpen(true)}
             onMouseLeave={() => setIsMegaMenuOpen(false)}
           >
-            <button 
+            <button
               onClick={() => onNavigate('list')}
               className={cn(
                 "relative transition-colors duration-300 hover:text-luxe-gold flex items-center gap-1",
@@ -116,7 +116,7 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNaviga
                     <ul className="space-y-4">
                       {cat.items.map((item, i) => (
                         <li key={i}>
-                          <button 
+                          <button
                             onClick={() => { onNavigate('list'); setIsMegaMenuOpen(false); }}
                             className="text-luxe-text hover:text-luxe-gold transition-colors normal-case tracking-normal text-sm opacity-70 hover:opacity-100"
                           >
@@ -141,7 +141,7 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNaviga
             </div>
           </li>
           <li>
-            <button 
+            <button
               onClick={() => onNavigate('projects')}
               className={cn(
                 "relative transition-colors duration-300 hover:text-luxe-gold",
@@ -154,13 +154,13 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNaviga
         </ul>
 
         <div className="flex items-center space-x-6">
-          <button 
+          <button
             onClick={onSearchClick}
             className="text-luxe-text hover:text-luxe-gold transition-colors hidden md:block"
           >
             <Search size={20} />
           </button>
-          
+
           <div className="hidden sm:flex items-center space-x-3 group cursor-pointer border-l border-luxe-champagne/20 pl-6 bg-luxe-gold/5 py-2 px-4 rounded-full border border-luxe-gold/20 hover:bg-luxe-gold/10 transition-all duration-300">
             <div className="w-10 h-10 rounded-full bg-luxe-gold text-white flex items-center justify-center shadow-lg shadow-luxe-gold/20 animate-pulse-subtle">
               <Phone size={18} />
@@ -180,7 +180,7 @@ const Navbar = ({ onNavigate, currentPage, onSearchClick, settings }: { onNaviga
       {/* Mobile Menu */}
       {isMenuOpen && (
         <div className="md:hidden bg-luxe-ivory border-b border-luxe-champagne/10 p-6 flex flex-col space-y-4 text-[11px] uppercase tracking-widest font-medium">
-          <button 
+          <button
             onClick={() => { onSearchClick(); setIsMenuOpen(false); }}
             className="flex items-center gap-3 text-luxe-gold"
           >
@@ -200,9 +200,9 @@ const Footer = ({ onConsult, settings }: { onConsult: () => void, settings: Site
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
         <div>
           <div className="mb-8">
-            <img 
-              src="https://storage.googleapis.com/static.antigravity.dev/projects/fpgvvfozh5rlgizskkepiy/logo.png" 
-              alt="Hoangan Decor" 
+            <img
+              src="https://storage.googleapis.com/static.antigravity.dev/projects/fpgvvfozh5rlgizskkepiy/logo.png"
+              alt="Hoangan Decor"
               className="h-10 w-auto brightness-0 invert"
             />
           </div>
@@ -281,7 +281,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
   const handleConsultSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!phone.trim()) return;
-    
+
     setIsSubmitting(true);
     // Simulate API call for pure front-end
     setTimeout(() => {
@@ -330,13 +330,13 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
             Bộ sưu tập vật liệu trang trí nội thất đẳng cấp — từ sàn gỗ sang trọng đến giấy dán tường nghệ thuật, tạo nên tổ ấm hoàn hảo theo phong cách riêng của bạn.
           </p>
           <div className="flex flex-wrap gap-4">
-            <button 
+            <button
               onClick={() => onNavigate('list')}
               className="bg-luxe-black text-white px-10 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-colors duration-300"
             >
               Khám Phá Ngay
             </button>
-            <button 
+            <button
               onClick={onConsult}
               className="border border-luxe-champagne text-luxe-gold px-10 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-champagne hover:text-white transition-all duration-300"
             >
@@ -347,27 +347,27 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
         <div className="flex-1 relative min-h-[500px] lg:min-h-0 bg-luxe-mid">
           <div className="absolute inset-0 grid grid-cols-2 grid-rows-2 gap-2 p-2">
             <div className="row-span-2 overflow-hidden group relative">
-              <img 
-                src="https://images.unsplash.com/photo-1581850518616-bcb8186c443e?auto=format&fit=crop&q=80" 
-                alt="Sàn gỗ" 
+              <img
+                src="./src/assets/sango.jpg"
+                alt="Sàn gỗ"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute bottom-6 left-6 text-white text-[10px] tracking-widest uppercase bg-black/30 backdrop-blur-sm px-3 py-1">Sàn Gỗ Cao Cấp</div>
             </div>
             <div className="overflow-hidden group relative">
-              <img 
-                src="https://images.unsplash.com/photo-1615873968403-89e068629275?auto=format&fit=crop&q=80" 
-                alt="Ốp tường" 
+              <img
+                src="./src/assets/optuong.jpg"
+                alt="Ốp tường"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 referrerPolicy="no-referrer"
               />
               <div className="absolute bottom-6 left-6 text-white text-[10px] tracking-widest uppercase bg-black/30 backdrop-blur-sm px-3 py-1">Tấm Ốp Tường</div>
             </div>
             <div className="overflow-hidden group relative">
-              <img 
-                src="https://images.unsplash.com/photo-1533090161767-e6ffed986c88?auto=format&fit=crop&q=80" 
-                alt="Thảm cỏ" 
+              <img
+                src="./src/assets/thamco.jpg"
+                alt="Thảm cỏ"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 referrerPolicy="no-referrer"
               />
@@ -404,22 +404,9 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-6">
             <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="h-[1px] w-8 bg-luxe-champagne"></div>
-                <span className="text-[10px] uppercase tracking-widest text-luxe-champagne font-semibold">Danh Mục Sản Phẩm</span>
-              </div>
-              <h2 className="font-serif text-4xl md:text-5xl font-light">Bộ Sưu Tập <span className="text-luxe-gold">Đặc Trưng</span></h2>
-            </div>
-            <button 
-              onClick={() => onNavigate('list')}
-              className="text-[11px] uppercase tracking-widest text-luxe-gold border-b border-luxe-champagne/40 pb-1 hover:border-luxe-gold transition-all"
-            >
-              Xem tất cả bộ sưu tập →
-            </button>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              <div className="flex items-center sp          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1516455590571-18256e5bb9ff?auto=format&fit=crop&q=80" alt="Sàn gỗ tự nhiên" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+              <img src="./src/assets/sangotunhien.jpg" alt="Sàn gỗ tự nhiên" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
                 <h3 className="font-serif text-2xl text-white mb-1">Sàn Gỗ Tự Nhiên</h3>
                 <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Sồi • Gõ Đỏ • Walnut</p>
@@ -427,7 +414,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
               </div>
             </div>
             <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1581850518616-bcb8186c443e?auto=format&fit=crop&q=80" alt="Sàn gỗ công nghiệp" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+              <img src="./src/assets/sangonhantao.jpg" alt="Sàn gỗ công nghiệp" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
                 <h3 className="font-serif text-2xl text-white mb-1">Sàn Công Nghiệp</h3>
                 <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Chống Nước • Bền Bỉ</p>
@@ -435,7 +422,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
               </div>
             </div>
             <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1615873968403-89e068629275?auto=format&fit=crop&q=80" alt="Tấm ốp tường" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+              <img src="./src/assets/tamnhua.jpg" alt="Tấm ốp tường" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
                 <h3 className="font-serif text-2xl text-white mb-1">Tấm Ốp Tường</h3>
                 <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Nano • PVC Vân Đá</p>
@@ -443,7 +430,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
               </div>
             </div>
             <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&q=80" alt="Xốp dán tường" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+              <img src="./src/assets/xopdantuong.jpg" alt="Xốp dán tường" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
                 <h3 className="font-serif text-2xl text-white mb-1">Xốp Dán Tường</h3>
                 <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">3D • Cách Âm</p>
@@ -451,7 +438,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
               </div>
             </div>
             <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1615529328331-f8917597711f?auto=format&fit=crop&q=80" alt="Giấy dán tường" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
+              <img src="./src/assets/giaydantuong.jpg" alt="Giấy dán tường" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
               <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
                 <h3 className="font-serif text-2xl text-white mb-1">Giấy Dán Tường</h3>
                 <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Hàn Quốc • Nhật Bản</p>
@@ -465,13 +452,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
                 <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Sân Vườn • Ban Công</p>
                 <span className="text-white text-[10px] transition-transform duration-300 group-hover:translate-x-2">→ Khám phá</span>
               </div>
-            </div>
-            <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
-              <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&q=80" alt="Phào chỉ" className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105" referrerPolicy="no-referrer" />
-              <div className="absolute inset-0 cat-card-overlay flex flex-col justify-end p-8">
-                <h3 className="font-serif text-2xl text-white mb-1">Phào Chỉ</h3>
-                <p className="text-white/60 text-[11px] tracking-wider uppercase mb-3">Trang Trí • Cổ Điển</p>
-                <span className="text-white text-[10px] transition-transform duration-300 group-hover:translate-x-2">→ Khám phá</span>
+            </div>�� Khám phá</span>
               </div>
             </div>
             <div className="group relative overflow-hidden h-[350px] cursor-pointer" onClick={() => onNavigate('list')}>
@@ -586,7 +567,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
           <div className="text-center mb-16">
             <h2 className="font-serif text-4xl lg:text-5xl font-light">Khách Hàng Nói Gì?</h2>
           </div>
-          
+
           <div className="relative max-w-4xl mx-auto">
             <div className="overflow-hidden">
               <AnimatePresence mode="wait">
@@ -612,13 +593,13 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
 
             {/* Navigation Buttons */}
             <div className="flex justify-center items-center gap-8 mt-12">
-              <button 
+              <button
                 onClick={prevTestimonial}
                 className="w-12 h-12 rounded-full border border-luxe-champagne/20 flex items-center justify-center text-luxe-text hover:bg-luxe-gold hover:text-white hover:border-luxe-gold transition-all duration-300"
               >
                 <ChevronLeft size={20} />
               </button>
-              
+
               <div className="flex gap-3">
                 {testimonials.map((_, idx) => (
                   <button
@@ -632,7 +613,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
                 ))}
               </div>
 
-              <button 
+              <button
                 onClick={nextTestimonial}
                 className="w-12 h-12 rounded-full border border-luxe-champagne/20 flex items-center justify-center text-luxe-text hover:bg-luxe-gold hover:text-white hover:border-luxe-gold transition-all duration-300"
               >
@@ -651,15 +632,15 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
               <h2 className="font-serif text-4xl lg:text-5xl font-light mb-6">Bắt Đầu Hành Trình <br /><span className="text-luxe-gold">Trang Trí</span> Ngôi Nhà</h2>
               <p className="text-luxe-text text-base lg:text-lg opacity-70 mb-10 max-w-lg leading-relaxed">Nhận tư vấn miễn phí và báo giá chi tiết từ đội ngũ chuyên gia. Để lại thông tin liên hệ — chúng tôi sẽ gọi lại trong vòng 30 phút.</p>
               <form className="flex flex-col sm:flex-row gap-4" onSubmit={handleConsultSubmit}>
-                <input 
-                  className="flex-grow border border-luxe-champagne/30 px-6 py-4 text-sm focus:ring-1 focus:ring-luxe-gold focus:border-luxe-gold outline-none bg-white/80 backdrop-blur-sm" 
-                  placeholder="Số điện thoại của bạn..." 
-                  type="tel" 
+                <input
+                  className="flex-grow border border-luxe-champagne/30 px-6 py-4 text-sm focus:ring-1 focus:ring-luxe-gold focus:border-luxe-gold outline-none bg-white/80 backdrop-blur-sm"
+                  placeholder="Số điện thoại của bạn..."
+                  type="tel"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   required
                 />
-                <button 
+                <button
                   disabled={isSubmitting}
                   className="bg-luxe-black text-white px-10 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all disabled:opacity-50"
                 >
@@ -667,7 +648,7 @@ const HomePage = ({ onNavigate, onConsult }: { onNavigate: (p: Page) => void, on
                 </button>
               </form>
               {isSuccess && (
-                <motion.p 
+                <motion.p
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="mt-4 text-emerald-600 text-sm font-medium flex items-center gap-2"
@@ -696,12 +677,12 @@ const ProductListPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
   const [sortBy, setSortBy] = React.useState('newest');
 
   const CATEGORIES = [
-    'Sàn Gỗ Tự Nhiên', 
-    'Sàn Gỗ Công Nghiệp', 
-    'Sàn Nhựa SPC', 
+    'Sàn Gỗ Tự Nhiên',
+    'Sàn Gỗ Công Nghiệp',
+    'Sàn Nhựa SPC',
     'Sàn Nhựa Vinyl',
-    'Tấm Ốp Tường Nano', 
-    'PVC Vân Đá', 
+    'Tấm Ốp Tường Nano',
+    'PVC Vân Đá',
     'Xốp Dán Tường 3D',
     'Giấy Dán Tường',
     'Thảm Cỏ Nhân Tạo',
@@ -717,7 +698,7 @@ const ProductListPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
   ];
 
   const toggleCategory = (cat: string) => {
-    setSelectedCategories(prev => 
+    setSelectedCategories(prev =>
       prev.includes(cat) ? prev.filter(c => c !== cat) : [...prev, cat]
     );
   };
@@ -774,11 +755,11 @@ const ProductListPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
                 <div className="space-y-3">
                   {CATEGORIES.map(label => (
                     <label key={label} className="flex items-center gap-3 cursor-pointer group">
-                      <input 
-                        type="checkbox" 
+                      <input
+                        type="checkbox"
                         checked={selectedCategories.includes(label)}
                         onChange={() => toggleCategory(label)}
-                        className="w-4 h-4 border-luxe-champagne/30 text-luxe-gold focus:ring-luxe-gold rounded-sm" 
+                        className="w-4 h-4 border-luxe-champagne/30 text-luxe-gold focus:ring-luxe-gold rounded-sm"
                       />
                       <span className={cn(
                         "text-[10px] uppercase tracking-widest transition-colors",
@@ -793,13 +774,13 @@ const ProductListPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
                 <p className="text-[10px] uppercase tracking-[0.2em] font-bold text-luxe-champagne">Tông màu</p>
                 <div className="flex flex-wrap gap-3">
                   {COLORS.map(color => (
-                    <button 
-                      key={color.hex} 
+                    <button
+                      key={color.hex}
                       onClick={() => setSelectedColor(selectedColor === color.hex ? null : color.hex)}
                       className={cn(
                         "w-8 h-8 rounded-full ring-1 ring-luxe-champagne/20 transition-all shadow-sm relative",
                         selectedColor === color.hex ? "ring-2 ring-luxe-gold scale-110" : "hover:ring-luxe-gold"
-                      )} 
+                      )}
                       style={{ backgroundColor: color.hex }}
                       title={color.label}
                     >
@@ -813,7 +794,7 @@ const ProductListPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
                 </div>
               </div>
 
-              <button 
+              <button
                 onClick={clearFilters}
                 className="w-full py-4 border border-luxe-champagne/30 text-[10px] font-bold uppercase tracking-[0.2em] hover:bg-luxe-champagne hover:text-white transition-all"
               >
@@ -830,7 +811,7 @@ const ProductListPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
               </p>
               <div className="flex items-center gap-4">
                 <span className="text-[10px] uppercase tracking-widest text-luxe-text/60">Sắp xếp:</span>
-                <select 
+                <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value)}
                   className="text-[10px] uppercase tracking-widest border-none bg-transparent focus:ring-0 cursor-pointer font-bold text-luxe-gold"
@@ -932,7 +913,7 @@ const ProductDetailPage = ({ onNavigate, onConsult, settings }: { onNavigate: (p
               ))}
             </div>
             <div className="flex flex-col gap-4">
-              <button 
+              <button
                 onClick={onConsult}
                 className="bg-luxe-black text-white px-10 py-5 text-[11px] uppercase tracking-[0.2em] hover:bg-luxe-gold transition-colors duration-300"
               >
@@ -1016,8 +997,8 @@ const ProductDetailPage = ({ onNavigate, onConsult, settings }: { onNavigate: (p
 };
 
 const SearchPage = ({ onNavigate, query }: { onNavigate: (p: Page) => void, query: string }) => {
-  const filteredProducts = PRODUCTS.filter(p => 
-    p.title.toLowerCase().includes(query.toLowerCase()) || 
+  const filteredProducts = PRODUCTS.filter(p =>
+    p.title.toLowerCase().includes(query.toLowerCase()) ||
     p.cat.toLowerCase().includes(query.toLowerCase())
   );
 
@@ -1055,7 +1036,7 @@ const SearchPage = ({ onNavigate, query }: { onNavigate: (p: Page) => void, quer
             <Search size={48} className="mx-auto text-luxe-champagne/30 mb-6" />
             <h3 className="font-serif text-3xl mb-4">Rất tiếc, không tìm thấy kết quả</h3>
             <p className="text-luxe-text opacity-60 mb-10">Hãy thử tìm kiếm với từ khóa khác hoặc quay lại trang sản phẩm.</p>
-            <button 
+            <button
               onClick={() => onNavigate('list')}
               className="bg-luxe-black text-white px-10 py-4 text-[11px] uppercase tracking-widest hover:bg-luxe-gold transition-all"
             >
@@ -1164,7 +1145,7 @@ const ProjectsPage = ({ onNavigate }: { onNavigate: (p: Page) => void }) => {
 
 const SearchOverlay = ({ isOpen, onClose, onNavigate, onSearch }: { isOpen: boolean, onClose: () => void, onNavigate: (p: Page) => void, onSearch: (q: string) => void }) => {
   const [query, setQuery] = React.useState('');
-  
+
   if (!isOpen) return null;
 
   const handleSearch = (e?: React.FormEvent) => {
@@ -1176,7 +1157,7 @@ const SearchOverlay = ({ isOpen, onClose, onNavigate, onSearch }: { isOpen: bool
     }
   };
 
-  const mockResults = PRODUCTS.filter(item => 
+  const mockResults = PRODUCTS.filter(item =>
     item.title.toLowerCase().includes(query.toLowerCase()) ||
     item.cat.toLowerCase().includes(query.toLowerCase())
   ).slice(0, 5);
@@ -1191,12 +1172,12 @@ const SearchOverlay = ({ isOpen, onClose, onNavigate, onSearch }: { isOpen: bool
       <div className="h-full flex flex-col items-center justify-center px-6">
         <div className="w-full max-w-3xl">
           <form onSubmit={handleSearch} className="relative mb-12">
-            <input 
+            <input
               autoFocus
-              type="text" 
+              type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Tìm kiếm sản phẩm..." 
+              placeholder="Tìm kiếm sản phẩm..."
               className="w-full bg-transparent border-b-2 border-luxe-champagne/30 py-6 text-3xl md:text-5xl font-serif text-white placeholder:text-white/20 outline-none focus:border-luxe-gold transition-colors"
             />
             <button type="submit" className="absolute right-0 top-1/2 -translate-y-1/2 text-luxe-gold hover:scale-110 transition-transform">
@@ -1208,7 +1189,7 @@ const SearchOverlay = ({ isOpen, onClose, onNavigate, onSearch }: { isOpen: bool
             <div className="animate-in slide-in-from-top-4 duration-500">
               <div className="flex items-center justify-between mb-8">
                 <h4 className="text-[10px] uppercase tracking-[0.3em] text-luxe-champagne font-bold">Gợi ý kết quả ({mockResults.length})</h4>
-                <button 
+                <button
                   onClick={handleSearch}
                   className="text-[10px] uppercase tracking-widest text-luxe-gold font-bold border-b border-luxe-gold/30 hover:border-luxe-gold transition-all"
                 >
@@ -1217,8 +1198,8 @@ const SearchOverlay = ({ isOpen, onClose, onNavigate, onSearch }: { isOpen: bool
               </div>
               <div className="space-y-6">
                 {mockResults.length > 0 ? mockResults.map((item, idx) => (
-                  <div 
-                    key={idx} 
+                  <div
+                    key={idx}
                     className="flex items-center gap-6 group cursor-pointer"
                     onClick={() => { onNavigate('detail'); onClose(); }}
                   >
@@ -1272,13 +1253,13 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar 
-        onNavigate={setCurrentPage} 
-        currentPage={currentPage} 
+      <Navbar
+        onNavigate={setCurrentPage}
+        currentPage={currentPage}
         onSearchClick={() => setIsSearchOpen(true)}
         settings={settings}
       />
-      
+
       <main className="flex-grow">
         {currentPage === 'home' && <HomePage onNavigate={setCurrentPage} onConsult={scrollToContact} />}
         {currentPage === 'list' && <ProductListPage onNavigate={setCurrentPage} />}
@@ -1289,16 +1270,16 @@ export default function App() {
 
       <Footer onConsult={scrollToContact} settings={settings} />
 
-      <SearchOverlay 
-        isOpen={isSearchOpen} 
-        onClose={() => setIsSearchOpen(false)} 
+      <SearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
         onNavigate={setCurrentPage}
         onSearch={setSearchQuery}
       />
 
       {/* Floating Hotline Button */}
-      <a 
-        href={`tel:${settings?.hotline?.replace(/\s/g, '') || '0909123456'}`} 
+      <a
+        href={`tel:${settings?.hotline?.replace(/\s/g, '') || '0909123456'}`}
         className="fixed bottom-8 right-8 z-[60] flex items-center gap-3 bg-luxe-gold text-white px-6 py-4 rounded-full shadow-2xl shadow-luxe-gold/40 hover:scale-105 transition-transform duration-300 group"
       >
         <div className="relative">
