@@ -35,6 +35,26 @@
   .cat-card-overlay {
     background: linear-gradient(to top, rgba(30, 22, 8, 0.9) 0%, rgba(30, 22, 8, 0.2) 60%, transparent 100%);
   }
+
+  button, a, [role="button"] {
+    @apply cursor-pointer;
+  }
+
+  .markdown-body {
+    @apply text-luxe-text leading-relaxed;
+  }
+  .markdown-body h3 {
+    @apply font-serif text-2xl text-luxe-black mt-10 mb-6;
+  }
+  .markdown-body p {
+    @apply mb-6 opacity-80;
+  }
+  .markdown-body ul {
+    @apply list-disc list-inside mb-8 space-y-3 opacity-80;
+  }
+  .markdown-body strong {
+    @apply text-luxe-black font-bold;
+  }
 }
 
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
